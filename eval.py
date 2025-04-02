@@ -3,6 +3,8 @@ import neat
 from data import x, y
 
 def squared_error_fit(xi, yi):
+    xi = float(xi)
+    yi = float(yi)
     return (xi - yi) ** 2
 
 def eval_genomes(genomes, config):

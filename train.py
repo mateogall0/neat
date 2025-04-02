@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 from eval import eval_genomes
-from data import x, y
+from data import val_x, val_y
 import neat
 import matplotlib.pyplot as plt
 
 
-def plot_train(gens: list, avg_fitness: list):
-    plt.plot(gens, avg_fitness, label='Average Fitness')
+def plot_train(num_gens: int, avg_fitness: list):
+    plt.plot(list(range(num_gens)), avg_fitness, label='Average Fitness')
     plt.xlabel('Generation')
     plt.ylabel('Fitness')
     plt.title('NEAT Algorithm Fitness Progress')
@@ -27,22 +27,19 @@ def run(config_file, plot=True):
 
     avg_fitness = []
 
-    num_gens = 16384
-    step = 1024
+    num_gens = 32
+    step = 1
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
-        current_avg_fitness = stats.get_fitness_mean()[-1]
-        avg_fitness.append(current_avg_fitness)
-        print(f"Generation {generation}: Avg Fitness = {current_avg_fitness}")
+        avg_fitness.append(stats.get_fitness_mean()[-1])
 
-    gens = list(range(0, num_gens, step))
-    plot_train(gens, avg_fitness)
+    plot_train(num_gens, avg_fitness)
 
     winner = stats.best_genome()
     print('\nBest genome:\n{!s}'.format(winner))
 
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
-    for xi, xo in zip(x, y):
+    for xi, xo in zip(val_x, val_y):
         output = winner_net.activate(xi)
         print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
 
