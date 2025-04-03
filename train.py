@@ -96,24 +96,29 @@ def run(config_file, plot=True):
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    avg_fitness = []
-    best_fitness = []
-    genome_size = []
+    if plot:
+        avg_fitness = []
+        best_fitness = []
+        genome_size = []
 
     num_gens = 128
     step = 16
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
-        avg_fitness.append(stats.get_fitness_mean()[-1:])
-        current_best = stats.best_genome()
-        best_fitness.append(current_best.fitness)
-        genome_size.append(len(current_best.connections) + len(current_best.nodes))
-
-    plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size)
+        if plot:
+            avg_fitness.append(stats.get_fitness_mean()[-1:])
+            current_best = stats.best_genome()
+            best_fitness.append(current_best.fitness)
+            genome_size.append(len(current_best.connections) + len(current_best.nodes))
 
     winner = stats.best_genome()
+    if plot:
+        plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size)
+        plot_genome(config, winner)
+
+
     print('\nBest genome:\n{!s}'.format(winner))
-    plot_genome(config, winner)
+
 
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
     for xi, xo in zip(val_x, val_y):
@@ -122,4 +127,4 @@ def run(config_file, plot=True):
 
 
 if __name__ == '__main__':
-    run('config-feedforward')
+    run('config-feedforward', plot=True)
