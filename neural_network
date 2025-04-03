@@ -1,0 +1,11 @@
+digraph {
+	input_0 [label="Input 0"]
+	input_1 [label="Input 1"]
+	input_2 [label="Input 2"]
+	input_3 [label="Input 3"]
+	hidden_4 [label="Hidden 0"]
+	output_5 [label="Output 0"]
+	"input_-2" -> "hidden_-4" [label=-0.55]
+	"input_-3" -> "hidden_-4" [label=0.38]
+	"input_-4" -> "hidden_-4" [label=0.66]
+}

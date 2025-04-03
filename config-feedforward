@@ -46,7 +46,7 @@ aggregation_options = sum
 # Node options
 num_inputs = 4
 num_hidden = 0
-num_outputs = 10
+num_outputs = 1
 
 # Connection options
 initial_connection = full_direct

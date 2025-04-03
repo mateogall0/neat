@@ -2,3 +2,4 @@ neat-python
 matplotlib
 scikit-learn
 pandas
+graphviz
