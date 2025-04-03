@@ -27,13 +27,13 @@ def run(config_file, plot=True):
 
     avg_fitness = []
 
-    num_gens = 32
+    num_gens = 8
     step = 1
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
-        avg_fitness.append(stats.get_fitness_mean()[-1])
+        avg_fitness.append(stats.get_fitness_mean()[-1:])
 
-    plot_train(num_gens, avg_fitness)
+    plot_train(len(avg_fitness), avg_fitness)
 
     winner = stats.best_genome()
     print('\nBest genome:\n{!s}'.format(winner))

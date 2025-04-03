@@ -34,9 +34,9 @@ weight_mutate_rate = 0.8
 weight_replace_rate = 0.1
 
 # Activation options
-activation_default = sigmoid
-activation_mutate_rate = 0.0
-activation_options = sigmoid
+activation_default = random
+activation_mutate_rate = 0.1
+activation_options = sigmoid tanh relu
 
 # Aggregation options
 aggregation_default = sum
@@ -44,7 +44,7 @@ aggregation_mutate_rate = 0.0
 aggregation_options = sum
 
 # Node options
-num_inputs = 784
+num_inputs = 4
 num_hidden = 0
 num_outputs = 10
 

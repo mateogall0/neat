@@ -13,4 +13,4 @@ def eval_genomes(genomes, config):
         g.fitness = 4.0
         for xi, yi in zip(x, y):
             output = net.activate(xi)
-            g.fitness -= squared_error_fit(output[0], yi[0])
+            g.fitness -= squared_error_fit(output[0], yi)
