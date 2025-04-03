@@ -25,7 +25,7 @@ def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size
     plt.tight_layout()
     plt.show()
 
-def plot_genome(config, genome, view=True, filename=None, node_names=None,
+def plot_genome(config, genome, view=True, filename="nerual_network", node_names=None,
                 show_disabled=True, prune_unused=False, fmt='svg'):
     if prune_unused:
         genome = genome.get_pruned_copy(config.genome_config)
@@ -36,8 +36,6 @@ def plot_genome(config, genome, view=True, filename=None, node_names=None,
     assert type(node_names) is dict
 
     node_colors = {}
-
-    assert type(node_colors) is dict
 
     node_attrs = {
         'shape': 'circle',
@@ -83,7 +81,7 @@ def plot_genome(config, genome, view=True, filename=None, node_names=None,
             width = str(0.1 + abs(cg.weight / 5.0))
             dot.edge(a, b, _attributes={'style': style, 'color': color, 'penwidth': width})
 
-    dot.render(filename, view=view)
+    dot.render(f'{filename}.{fmt}', view=view)
 
     return dot
 
