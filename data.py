@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-from sklearn.datasets import fetch_openml
+from sklearn.datasets import fetch_openml, load_wine
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-mnist = fetch_openml('iris', version=1, as_frame=False)
+dataset = load_wine()
+# dataset = fetch_openml('wine', version=1, as_frame=True)
 
-entire_x, entire_y = mnist['data'], mnist['target']
+entire_x, entire_y = dataset['data'], dataset['target']
 
 encoder = LabelEncoder()
 entire_y = encoder.fit_transform(entire_y)

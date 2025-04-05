@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import numpy as np
 import graphviz
 from eval import eval_genomes
 from data import val_x, val_y
@@ -101,8 +102,8 @@ def run(config_file, plot=True):
         best_fitness = []
         genome_size = []
 
-    num_gens = 128
-    step = 16
+    num_gens = 8192
+    step = 128
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
         if plot:
@@ -123,7 +124,7 @@ def run(config_file, plot=True):
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
     for xi, xo in zip(val_x, val_y):
         output = winner_net.activate(xi)
-        print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
+        print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, np.argmax(output)))
 
 
 if __name__ == '__main__':
