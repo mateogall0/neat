@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import neat
+import numpy as np
 from data import x, y
 
 def squared_error_fit(xi, yi):
@@ -13,4 +14,4 @@ def eval_genomes(genomes, config):
         g.fitness = 4.0
         for xi, yi in zip(x, y):
             output = net.activate(xi)
-            g.fitness -= squared_error_fit(output[0], yi)
+            g.fitness -= squared_error_fit(np.argmax(output), yi)

@@ -102,8 +102,8 @@ def run(config_file, plot=True):
         best_fitness = []
         genome_size = []
 
-    num_gens = 8192
-    step = 128
+    num_gens = 1024
+    step = 32
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
         if plot:
