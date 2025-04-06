@@ -8,8 +8,10 @@ import matplotlib.pyplot as plt
 
 
 def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size: list,
-               val_fitness: list):
-    plt.subplot(3, 1, 1)
+        val_fitness: list, validation_amount: list):
+
+    subplot_layout_v = 4
+    plt.subplot(subplot_layout_v, 1, 1)
     plt.plot(list(range(num_gens)), avg_fitness, label='Average Fitness')
     plt.plot(list(range(num_gens)), best_fitness, label='Best Fitness')
     plt.xlabel('Generation')
@@ -18,7 +20,7 @@ def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size
     plt.legend()
     plt.grid(True)
 
-    plt.subplot(3, 1, 2)
+    plt.subplot(subplot_layout_v, 1, 2)
     plt.plot(list(range(num_gens)), genome_size, label='Best Genome Size')
     plt.xlabel('Generation')
     plt.ylabel('Size')
@@ -26,13 +28,20 @@ def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size
     plt.legend()
     plt.grid(True)
 
-    plt.subplot(3, 1, 3)
+    plt.subplot(subplot_layout_v, 1, 3)
     plt.plot(list(range(num_gens)), genome_size, label='Genome Fitness')
     plt.xlabel('Generation')
     plt.ylabel('Fitness')
     plt.title('Best Genome Validation Fitness')
     plt.legend()
     plt.grid(True)
+
+    plt.subplot(subplot_layout_v, 1, 4)
+    plt.bar(list(range(num_gens)), validation_amount, label='Validation Assertions Passed')
+    plt.xlabel('Generation')
+    plt.ylabel('Count')
+    plt.title('Validation Assertions per Generation')
+    plt.grid(True, axis='y')
 
     plt.tight_layout()
     plt.show()
@@ -124,6 +133,7 @@ def run(config_file, plot=True):
         best_fitness = []
         genome_size = []
         best_val_fitness = []
+        validation_amount = []
 
     num_gens = 8
     step = 1
@@ -135,11 +145,15 @@ def run(config_file, plot=True):
             best_fitness.append(current_best.fitness)
             genome_size.append(len(current_best.connections) + len(current_best.nodes))
             current_best_net = neat.nn.FeedForwardNetwork.create(current_best, config)
-            best_val_fitness.append(np.mean(validate_data(current_best_net, False)))
+            val_data_res = validate_data(current_best_net, False)
+            best_val_fitness.append(np.mean(val_data_res))
+            vals = [1 if i == 0.0 else 0 for i in val_data_res]
+            validation_amount.append(sum(vals))
 
     winner = stats.best_genome()
     if plot:
-        plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size, best_val_fitness)
+        plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size,
+                   best_val_fitness, validation_amount)
         plot_genome(config, winner)
 
 
