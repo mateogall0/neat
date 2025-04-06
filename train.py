@@ -7,8 +7,9 @@ import neat
 import matplotlib.pyplot as plt
 
 
-def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size: list):
-    plt.subplot(2, 1, 1)
+def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size: list,
+               val_fitness: list):
+    plt.subplot(3, 1, 1)
     plt.plot(list(range(num_gens)), avg_fitness, label='Average Fitness')
     plt.plot(list(range(num_gens)), best_fitness, label='Best Fitness')
     plt.xlabel('Generation')
@@ -17,14 +18,25 @@ def plot_train(num_gens: int, avg_fitness: list, best_fitness: list, genome_size
     plt.legend()
     plt.grid(True)
 
-    plt.subplot(2, 1, 2)
+    plt.subplot(3, 1, 2)
     plt.plot(list(range(num_gens)), genome_size, label='Best Genome Size')
     plt.xlabel('Generation')
     plt.ylabel('Size')
     plt.title('Best Genome Size Progress')
     plt.legend()
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.plot(list(range(num_gens)), genome_size, label='Genome Fitness')
+    plt.xlabel('Generation')
+    plt.ylabel('Fitness')
+    plt.title('Best Genome Validation Fitness')
+    plt.legend()
+    plt.grid(True)
+
     plt.tight_layout()
     plt.show()
+
 
 def plot_genome(config, genome, view=True, filename="nerual_network", node_names=None,
                 show_disabled=True, prune_unused=False, fmt='svg'):
@@ -86,6 +98,16 @@ def plot_genome(config, genome, view=True, filename="nerual_network", node_names
 
     return dot
 
+def validate_data(genome, verbose=True) -> list:
+    outputs = []
+    for xi, xo in zip(val_x, val_y):
+        output = np.argmax(genome.activate(xi))
+        outputs.append(output)
+        if verbose:
+            print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
+    return outputs
+
+
 def run(config_file, plot=True):
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -101,9 +123,10 @@ def run(config_file, plot=True):
         avg_fitness = []
         best_fitness = []
         genome_size = []
+        best_val_fitness = []
 
-    num_gens = 1024
-    step = 32
+    num_gens = 8
+    step = 1
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
         if plot:
@@ -111,10 +134,12 @@ def run(config_file, plot=True):
             current_best = stats.best_genome()
             best_fitness.append(current_best.fitness)
             genome_size.append(len(current_best.connections) + len(current_best.nodes))
+            current_best_net = neat.nn.FeedForwardNetwork.create(current_best, config)
+            best_val_fitness.append(np.mean(validate_data(current_best_net, False)))
 
     winner = stats.best_genome()
     if plot:
-        plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size)
+        plot_train(len(avg_fitness), avg_fitness, best_fitness, genome_size, best_val_fitness)
         plot_genome(config, winner)
 
 
@@ -122,9 +147,7 @@ def run(config_file, plot=True):
 
 
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
-    for xi, xo in zip(val_x, val_y):
-        output = winner_net.activate(xi)
-        print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, np.argmax(output)))
+    validate_data(winner_net, verbose=True)
 
 
 if __name__ == '__main__':
