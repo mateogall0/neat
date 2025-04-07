@@ -14,4 +14,5 @@ entire_y = encoder.fit_transform(entire_y)
 x, val_x, y, val_y = train_test_split(entire_x,
                                       entire_y,
                                       test_size=0.1667,
-                                      random_state=42,)
+                                      random_state=42,
+                                      shuffle=True,)
