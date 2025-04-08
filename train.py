@@ -136,7 +136,7 @@ def run(config_file, plot=True):
         validation_amount = []
 
     num_gens = 1024
-    step = 32
+    step = 128
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
         if plot:
