@@ -135,8 +135,8 @@ def run(config_file, plot=True):
         best_val_fitness = []
         validation_amount = []
 
-    num_gens = 4096
-    step = 256
+    num_gens = 128
+    step = 16
     for generation in range(0, num_gens, step):
         p.run(eval_genomes, step)
         if plot:
