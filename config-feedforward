@@ -45,7 +45,7 @@ aggregation_options = sum
 
 # Node options
 num_inputs = 13
-num_hidden = 0
+num_hidden = 10
 num_outputs = 3
 
 # Connection options
