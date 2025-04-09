@@ -1,5 +1,5 @@
 # NEAT algorithm example
-This repository uses the Neuro Evolution of Augmenting Topologies (NEAT) algorithm to predict the Iris dataset.
+This repository uses the Neuro Evolution of Augmenting Topologies (NEAT) algorithm to predict datasets as in supervised learning.
 
 ## Requirements
 The project runs on Python and its requirements can be fetched from the `requirements.txt` file. You can also install all of them using the following command at root:
